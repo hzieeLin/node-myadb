@@ -77,3 +77,29 @@ exports.getUserInfo = (req, res) => {
         })
     })
 }
+
+exports.getMasterData =(req, res) => {
+    const sql = 'select count(task.id) as taskCount from task where username = ?'
+    const sql2 = 'select  total1  from time_info where username = ?'
+    db.query(sql,req.params.username , (err1, results1) => {
+        if(err1) return res.cc(err1)
+        if(results1.length !== 1) return res.cc('数据库异常，用户名不止一个！')
+        db.query(sql2,req.params.username , (err2, results2) => {
+            if(err2) return res.cc(err2)
+            res.send({
+                status: 200,
+                data: [results1[0],results2[0]]
+            })
+        } )
+    } )
+}
+exports.getTreeData = (req, res) => {
+    const sql = 'select content, time from tree where username = ?'
+    db.query(sql, req.params.username, (err, results) => {
+        if(err) return res.cc(err)
+        res.send({
+            status: 200,
+            data: results
+        })
+    })
+}

@@ -1,13 +1,17 @@
 const express = require('express')
 const app = express()
 const cors = require('cors')
+const con = require('config');
+const port = con.get('server.port');
+const host = con.get('server.host');
 // 这里的cors()的括号一定要加
 app.use(cors())
 const joi = require('joi')
 // 下面是导入路由
 const UserRouter = require('./router/user')
 const TaskRouter = require('./router/task')
-const TableRouter = require('./router/timetable')
+const TimeRouter = require('./router/time')
+const DiaryRouter = require('./router/diary')
 // 通过如下的代码，配置解析 `application/x-www-form-urlencoded` 格式的表单数据的中间件：
 app.use(express.urlencoded({ extended: false}))
 const bodyParser = require('body-parser');
@@ -32,7 +36,15 @@ app.use((req, res, next) => {
 app.use(expressJWT({secret: config.jwtSecretKey}).unless({path: [/^\/user/]}))
 app.use('/user', UserRouter)
 app.use('/task', TaskRouter)
-app.use('/timetable', TableRouter)
-app.listen(9000, () => {
-    console.log('api server running at http://127.0.0.1')
-})
+app.use('/time', TimeRouter)
+app.use('/diary', DiaryRouter)
+// app.listen(9000, () => {
+//     console.log('api server running at http://127.0.0.1')
+// })
+app.listen(9000, host, (err) => {
+    if (err) {
+        console.log(err);
+        process.exit(1);
+    }
+    console.log(`Server is running on ${host}:${port}`);
+});

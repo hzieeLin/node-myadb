@@ -6,4 +6,6 @@ router.post('/login',userHandler.login_User)
 router.get('/username/:name',userHandler.getUserCreateName)
 router.get('/userinfo/:name',userHandler.getUserInfo)
 router.post('/editCreateName',userHandler.editCreateName)
+router.get('/master/:username', userHandler.getMasterData)
+router.get('/tree/:username', userHandler.getTreeData)
 module.exports = router
